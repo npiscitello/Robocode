@@ -1,25 +1,28 @@
 package nbp;
 import robocode.*;
 import java.awt.Color;
+
 /**
  * BaxterLOL - a robot by Nick P
+ * 
+ * Target Behaivior:
+ * 	- Radar tracking
+ * 		- spin the radar, track the gun around when temp is less than a certain value
+ * 		- chase one robot and destroy; move on to a second, etc.
+ * 	-
+ * 	-
  */
+
 public class BaxterLOL extends Robot
 {
 	public void run() {
-		// Initialization of the robot should be put here
-
-		// After trying out your robot, try uncommenting the import at the top,
-		// and the next line:
-
 		setColors(Color.red,Color.black,Color.gray); // body,gun,radar
+		setAdjustRadarForRobotTurn(true);
 
 		// Robot main loop
 		while(true) {
-			ahead(100);
-			turnGunRight(360);
-			back(100);
-			turnGunRight(360);
+				// radar track as described above
+			
 		}
 	}
 
