@@ -27,7 +27,8 @@ public class BaxterLOL extends Robot
 	}
 
 	public void onScannedRobot(ScannedRobotEvent e) {
-		fire(1);
+		EnemyBot enemy = new EnemyBot();
+		enemy.update(e);
 	}
 
 	public void onHitByBullet(HitByBulletEvent e) {
