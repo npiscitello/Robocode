@@ -15,6 +15,9 @@ import java.awt.Color;
 
 public class BaxterLOL extends Robot
 {
+
+	EnemyBot enemy = new EnemyBot();
+	
 	public void run() {
 		setColors(Color.red,Color.black,Color.gray); // body,gun,radar
 		setAdjustRadarForRobotTurn(true);
@@ -27,7 +30,6 @@ public class BaxterLOL extends Robot
 	}
 
 	public void onScannedRobot(ScannedRobotEvent e) {
-		EnemyBot enemy = new EnemyBot();
 		enemy.update(e);
 	}
 
