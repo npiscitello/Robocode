@@ -4,40 +4,42 @@ import java.awt.Color;
 
 /**
  * BaxterLOL - a robot by Nick P
+ * 	I just needed a name for the robot; Baxter came to mind, then I laughed because
+ * 		Baxter is not a very good robot.
  * 
  * Target Behaivior:
  * 	- Radar tracking
- * 		- spin the radar, track the gun around when temp is less than a certain value
- * 		- chase one robot and destroy; move on to a second, etc.
- * 	-
- * 	-
+ * 		- constant 360* scan, keep table of opponent info (name, energy, bearing, distance, etc.)
+ * 		- choose lowest energy robot, attack until death
+ * 			- if all robots same energy, choose closest one
  */
 
 public class BaxterLOL extends Robot
 {
 
-	EnemyBot enemy = new EnemyBot();
-	
 	public void run() {
-		setColors(Color.red,Color.black,Color.gray); // body,gun,radar
+
+			// body,gun,radar,bullet,scanarc
+		setColors(Color.red,Color.black,Color.gray,Color.white,Color.red);
+			// make gun, radar, and body rotation independent
 		setAdjustRadarForRobotTurn(true);
+		setAdjustRadarForGunTurn(true);
+		setAdjustGunForRobotTurn(true);
 
 		// Robot main loop
 		while(true) {
 				// radar track as described above
-			
+			turnRadarRight(Rules.RADAR_TURN_RATE);
 		}
 	}
 
 	public void onScannedRobot(ScannedRobotEvent e) {
-		enemy.update(e);
+		enemy.update();
 	}
 
 	public void onHitByBullet(HitByBulletEvent e) {
-		back(10);
 	}
 
 	public void onHitWall(HitWallEvent e) {
-		back(20);
 	}	
 }
