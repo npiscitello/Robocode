@@ -10,12 +10,25 @@ import java.awt.Color;
  * Target Behaivior:
  * 	- Radar tracking
  * 		- constant 360* scan, keep table of opponent info (name, energy, bearing, distance, etc.)
- * 		- choose lowest energy robot, attack until death
- * 			- if all robots same energy, choose closest one
+ * 		- choose closest robot, attack until death
+ * 	- Movement
+ * 		- Always point at and move towards the targeted bot
+ * 		- if the bot is closer than a certain threshhold, move in a circle around it
+ * 			- once outside the threshhold, resume normal motion
+ * 			- looks like this:  <Enemy>	|cst	|mrt	<myself>
+ * 				- where cst = circle start threshhold and mrt = movement resume threshhold
+ * 	- Attack
+ * 		- Always point gun at the targeted bot
+ * 			- Only turn when the gun will be cool enough to shoot when it gets to the target heading
+ * 		- Fire only when on target heading
  */
 
 public class BaxterLOL extends Robot
 {
+
+	EnemyBots enemies = new EnemyBots();
+	
+	
 
 	public void run() {
 
@@ -34,7 +47,12 @@ public class BaxterLOL extends Robot
 	}
 
 	public void onScannedRobot(ScannedRobotEvent e) {
-		enemy.update();
+		enemies.update(e);
+		System.out.print("Registered Enemies: ");
+		System.out.print(enemies.getNames());
+		System.out.print("		Updated: ");
+		System.out.println(e.getName());
+
 	}
 
 	public void onHitByBullet(HitByBulletEvent e) {

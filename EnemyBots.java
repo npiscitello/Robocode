@@ -14,7 +14,7 @@ public class EnemyBots
 	ArrayList<Double> energy = new ArrayList<Double>();
 	ArrayList<Double> heading = new ArrayList<Double>();
 	ArrayList<Double> velocity = new ArrayList<Double>();
-	ArrayList<String> name = new ArrayList<String>();
+	ArrayList<String> names = new ArrayList<String>();
 	private int index;
 
 	public double getBearing(String name)	{
@@ -38,28 +38,29 @@ public class EnemyBots
 	}
 	
 	public ArrayList<String> getNames()	{
-		return name;
+		return names;
 	}
 	
 		// updates data for existing enemy or adds new enemy
 	public void update(ScannedRobotEvent e)	{
-		if(name.contains(e.getName()))	{
-			index = name.indexOf(e.getName());
-			bearing.add(index, e.getBearing());
-			distance.add(index, e.getDistance());
-			energy.add(index, e.getEnergy());
-			heading.add(index, e.getHeading());
-			velocity.add(index, e.getVelocity());
-			name.add(index, e.getName());
+		if(names.contains(e.getName()))	{
+			index = names.indexOf(e.getName());
+			bearing.set(index, e.getBearing());
+			distance.set(index, e.getDistance());
+			energy.set(index, e.getEnergy());
+			heading.set(index, e.getHeading());
+			velocity.set(index, e.getVelocity());
+			names.set(index, e.getName());
 		}	else	{
 			bearing.add(e.getBearing());
 			distance.add(e.getDistance());
 			energy.add(e.getEnergy());
 			heading.add(e.getHeading());
 			velocity.add(e.getVelocity());
-			name.add(e.getName());
+			names.add(e.getName());
 		}
 	}
+	
 		// clears all lists
 	public void reset()	{
 		bearing.clear();
@@ -67,6 +68,6 @@ public class EnemyBots
 		energy.clear();
 		heading.clear();
 		velocity.clear();
-		name.clear();
+		names.clear();
 	}
 }
