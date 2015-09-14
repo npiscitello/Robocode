@@ -34,17 +34,23 @@ public class BaxterLOL extends Robot
 
 	public void run() {
 
-			// body,gun,radar,bullet,scanarc
+			// body, gun, radar, bullet, scanarc
 		setColors(Color.red,Color.black,Color.gray,Color.white,Color.red);
 			// make gun, radar, and body rotation independent
 		setAdjustRadarForRobotTurn(true);
 		setAdjustRadarForGunTurn(true);
 		setAdjustGunForRobotTurn(true);
 
-		// Robot main loop
 		while(true) {
 			turnRadarRight(Rules.RADAR_TURN_RATE);
+			if(getGunHeat() == 0)	{
+				aimGun(enemies.getBearing(target));
+			}
 		}
+	}
+	
+	public void aimGun(double bearing)	{
+		
 	}
 
 	public void onScannedRobot(ScannedRobotEvent e) {
@@ -58,12 +64,6 @@ public class BaxterLOL extends Robot
 			System.out.println(enemies.getName(target));
 		}
 
-	}
-
-	public void onHitByBullet(HitByBulletEvent e) {
-	}
-
-	public void onHitWall(HitWallEvent e) {
 	}
 	
 	public void onStatus(StatusEvent e)	{
