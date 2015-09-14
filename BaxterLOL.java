@@ -1,6 +1,7 @@
 package nbp;
 import robocode.*;
 import java.awt.Color;
+import java.util.Collections;
 
 /**
  * BaxterLOL - a robot by Nick P
@@ -10,7 +11,7 @@ import java.awt.Color;
  * Target Behaivior:
  * 	- Radar tracking
  * 		- constant 360* scan, keep table of opponent info (name, energy, bearing, distance, etc.)
- * 		- choose closest robot, attack until death
+ * 		- choose closest robot, target until death
  * 	- Movement
  * 		- Always point at and move towards the targeted bot
  * 		- if the bot is closer than a certain threshhold, move in a circle around it
@@ -19,7 +20,7 @@ import java.awt.Color;
  * 				- where cst = circle start threshhold and mrt = movement resume threshhold
  * 	- Attack
  * 		- Always point gun at the targeted bot
- * 			- Only turn when the gun will be cool enough to shoot when it gets to the target heading
+ * 			- Only turn if the gun will be cool enough to shoot when it gets to the target heading
  * 		- Fire only when on target heading
  */
 
@@ -27,7 +28,8 @@ public class BaxterLOL extends Robot
 {
 
 	EnemyBots enemies = new EnemyBots();
-	
+		// contains the index value of the targeted enemy; -1 indicates no target
+	int target = -1;
 	
 
 	public void run() {
@@ -41,7 +43,6 @@ public class BaxterLOL extends Robot
 
 		// Robot main loop
 		while(true) {
-				// radar track as described above
 			turnRadarRight(Rules.RADAR_TURN_RATE);
 		}
 	}
@@ -49,9 +50,13 @@ public class BaxterLOL extends Robot
 	public void onScannedRobot(ScannedRobotEvent e) {
 		enemies.update(e);
 		System.out.print("Registered Enemies: ");
-		System.out.print(enemies.getNames());
+		System.out.print(enemies.getName());
 		System.out.print("		Updated: ");
 		System.out.println(e.getName());
+		if(target != -1)	{
+			System.out.print("Targeted: ");
+			System.out.println(enemies.getName(target));
+		}
 
 	}
 
@@ -59,5 +64,20 @@ public class BaxterLOL extends Robot
 	}
 
 	public void onHitWall(HitWallEvent e) {
+	}
+	
+	public void onStatus(StatusEvent e)	{
+			// if Baxter knows about all the robots but hasn't targeted one, target closest robot
+		if(e.getStatus().getOthers() == enemies.getName().size() && target == -1)	{
+			target = enemies.getDistance().indexOf(Collections.min(enemies.getDistance()));
+		}
+	}
+	
+	public void onRobotDeath(RobotDeathEvent e)	{
+			// delete dead robot from database
+		enemies.remove(enemies.getName().indexOf(e.getName()));
+		if(enemies.getName(target).equals(e.getName()))	{
+			target = -1;
+		}
 	}	
 }
