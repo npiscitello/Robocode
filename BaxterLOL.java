@@ -20,8 +20,8 @@ import java.util.Collections;
  * 				- where cst = circle start threshhold and mrt = movement resume threshhold
  * 	- Attack
  * 		- Always point gun at the targeted bot
- * 			- Only turn if the gun will be cool enough to shoot when it gets to the target heading
  * 		- Fire only when on target heading
+ * 			- don't fire if heat is above heat threshhold; resume firing when under cool threshhold
  */
 
 public class BaxterLOL extends Robot
@@ -43,14 +43,17 @@ public class BaxterLOL extends Robot
 
 		while(true) {
 			turnRadarRight(Rules.RADAR_TURN_RATE);
-			if(getGunHeat() == 0)	{
+			if(target != -1)	{
 				aimGun(enemies.getBearing(target));
+				if(getGunHeat() == 0)	{
+					fire(1);
+				}
 			}
 		}
 	}
 	
 	public void aimGun(double bearing)	{
-		
+		turnGunRight(getHeading() - getGunHeading() + enemies.getBearing(target));
 	}
 
 	public void onScannedRobot(ScannedRobotEvent e) {
