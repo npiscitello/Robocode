@@ -1,7 +1,8 @@
 package nbp;
 
-import robocode.*;
-import java.util.*;
+import java.util.ArrayList;
+
+import robocode.ScannedRobotEvent;
 
 public class EnemyBots
 {
@@ -9,12 +10,12 @@ public class EnemyBots
 		reset();
 	}
 		// initialize variable-length arrays
-	ArrayList<Double> bearing = new ArrayList<Double>();
-	ArrayList<Double> distance = new ArrayList<Double>();
-	ArrayList<Double> energy = new ArrayList<Double>();
-	ArrayList<Double> heading = new ArrayList<Double>();
-	ArrayList<Double> velocity = new ArrayList<Double>();
-	ArrayList<String> name = new ArrayList<String>();
+	ArrayList<Double> bearing = new ArrayList<>();
+	ArrayList<Double> distance = new ArrayList<>();
+	ArrayList<Double> energy = new ArrayList<>();
+	ArrayList<Double> heading = new ArrayList<>();
+	ArrayList<Double> velocity = new ArrayList<>();
+	ArrayList<String> name = new ArrayList<>();
 
 	// overloaded functions provide a specific bot's parameter
 	// or a list of parameter's for all bots
@@ -97,7 +98,7 @@ public class EnemyBots
 		name.clear();
 	}
 	
-		// delete a robot from the database - probably cuz we killed it!
+		// delete a robot from the database - probably because we killed it!
 	public void remove(int index)	{
 		bearing.remove(index);
 		distance.remove(index);

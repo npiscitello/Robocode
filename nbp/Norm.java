@@ -1,8 +1,11 @@
 package nbp;
 
-import robocode.*;
-import robocode.util.Utils;
 import java.awt.Color;
+
+import robocode.Robot;
+import robocode.RobotDeathEvent;
+import robocode.ScannedRobotEvent;
+import robocode.util.Utils;
 
 /*
  * Norm - a robot by  Nick P.
@@ -13,8 +16,10 @@ import java.awt.Color;
 public class Norm extends Robot
 {
 	private String enemyName = "none";													// variable declaration
+	@SuppressWarnings("unused")
 	private double x1, x2, x3, y1, y2, y3, dist1, dist2, head, head1, head2, theta, turn;
 	
+	@Override
 	public void run()	{																// default run (called upon creation)
 		setColors(Color.green,Color.white,Color.green,Color.green,Color.green);			// color assignment
 		setAdjustRadarForGunTurn(true);													// radar turns independently of gun
@@ -23,6 +28,7 @@ public class Norm extends Robot
 		}
 	}
 
+	@Override
 	public void onScannedRobot(ScannedRobotEvent e) {									// called when a robot is scanned
 		//out.println(enemyName);														// print enemy name to console, for debugging
 		if(enemyName.equals(e.getName()))	{}											// if it scans a new target...
@@ -52,6 +58,7 @@ public class Norm extends Robot
 		out.println("dist1 = " + dist1 + "  dist2 = " + dist2);*/
 	}
 	
+	@Override
 	public void onRobotDeath(RobotDeathEvent e)	{										// called when a robot dies
 		if(enemyName.equals(e.getName()));	{											// if the target died...
 			out.println("Target eliminated: " + enemyName);								// tell the console the target just died
