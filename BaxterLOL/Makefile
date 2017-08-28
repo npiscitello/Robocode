@@ -15,7 +15,7 @@ ROBOTS_DIR   	:= 	$(ROBOCODE)/robots
 ROBOCODEJAR  	:= 	$(ROBOCODE)/libs/robocode.jar
 ROBOCODEVER		:=	1.9.2.6
 
-ROBOTJAR    	:= 	$(SUPERPACKAGE).BaxterLOL.jar 
+ROBOTJAR    	:= 	$(SUPERPACKAGE).BaxterLOL_$(ROBOTVER).jar 
 OUTDIR 				:= 	out
 
 JAVAC 				:= 	javac
@@ -36,11 +36,11 @@ all: $(ROBOTS_DIR)/$(ROBOTJAR)
 $(ROBOTS_DIR)/$(ROBOTJAR): $(ROBOTJAR)
 	$(ECHO) "\n\x1B[32mCopying $< to $(ROBOTS_DIR)\x1B[0m"
 	mkdir -p $(ROBOTS_DIR)/$(SUPERPACKAGE)
-	cp $(ROBOTJAR) $(ROBOTS_DIR)/$(SUPERPACKAGE)
+	cp $(ROBOTJAR) $(ROBOTS_DIR)
 
 $(ROBOTJAR): $(CLASSES) $(PROPS)
 	$(ECHO) "\n\x1B[32mPacking $@...\x1B[0m"
-	$(JAR) $@  `find $(OUTDIR)/$(SUPERPACKAGE) -type f`
+	cd $(OUTDIR); $(JAR) ../$@  `find $(SUPERPACKAGE) -type f`
 
 $(CLASSES): $(SRC)
 	$(ECHO) "\n\x1B[32mCompiling $@...\x1B[0m"
@@ -48,13 +48,12 @@ $(CLASSES): $(SRC)
 
 $(PROPS):
 	$(ECHO) "\n\x1B[32mCreating $@...\x1B[0m"
-	@echo "robot.description=$(ROBOTDESC)"	\
-				"robot.include.source=true"				\
-				"robocode.version=$(ROBOCODEVER)"	\
-				"robot.version=$(ROBOTVER)"				\
-				"robot.author.name=$(ROBOTAUTH)"	\
-				"robot.classname=$(ROBOTCN)"			\
-				> $(OUTDIR)/$(SUPERPACKAGE)/$@
+	@$(ECHO) "robot.description=$(ROBOTDESC)" 	 > $(OUTDIR)/$(SUPERPACKAGE)/$@
+	@$(ECHO) "robot.include.source=true" 				>> $(OUTDIR)/$(SUPERPACKAGE)/$@
+	@$(ECHO) "robocode.version=$(ROBOCODEVER)" 	>> $(OUTDIR)/$(SUPERPACKAGE)/$@
+	@$(ECHO) "robot.version=$(ROBOTVER)" 				>> $(OUTDIR)/$(SUPERPACKAGE)/$@
+	@$(ECHO) "robot.author.name=$(ROBOTAUTH)" 	>> $(OUTDIR)/$(SUPERPACKAGE)/$@
+	@$(ECHO) "robot.classname=$(ROBOTCN)" 			>> $(OUTDIR)/$(SUPERPACKAGE)/$@
 
 $(SRC): $(OUTDIR)
 
