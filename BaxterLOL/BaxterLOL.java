@@ -2,7 +2,7 @@ package nbp;
 import java.awt.Color;
 import java.util.Collections;
 
-import robocode.Robot;
+import robocode.AdvancedRobot;
 import robocode.RobotDeathEvent;
 import robocode.Rules;
 import robocode.ScannedRobotEvent;
@@ -14,23 +14,22 @@ import robocode.StatusEvent;
  * 		Baxter is not a very good robot.
  * 
  * Target Behavior:
- * 	- Radar tracking
+ *  - Stage 1:
  * 		- constant 360* scan, keep table of opponent info (name, energy, bearing, distance, etc.)
  * 		- choose closest robot, target until death
- * 	- Movement
- * 		- Always point at and move towards the targeted bot
+ * 		- Always point gun towards the targeted bot
+ *  - Stage 2:
+ * 		- Use distance and current velocity of targeted bot to lead the shot (aim slightly ahead)
+ * 		- don't fire if heat is above heat threshold; resume firing when under cool threshold
+ *  - Stage 3:
+ * 		- Always move towards the targeted bot
  * 		- if the bot is closer than a certain threshold, move in a circle around it
  * 			- once outside the threshold, resume normal motion
  * 			- looks like this:  <Enemy>	|cst	|mrt	<myself>
  * 				- where cst = circle start threshold and mrt = movement resume threshold
- * 	- Attack
- * 		- Always point gun towards the targeted bot
- * 			- Use distance and current velocity of targeted bot to lead the shot (aim slightly ahead)
- * 		- Fire only when on target heading
- * 			- don't fire if heat is above heat threshold; resume firing when under cool threshold
  */
 
-public class BaxterLOL extends Robot
+public class BaxterLOL extends AdvancedRobot
 {
 
 	EnemyBots enemies = new EnemyBots();
@@ -52,15 +51,13 @@ public class BaxterLOL extends Robot
 			turnRadarRight(Rules.RADAR_TURN_RATE);
 			if(target != -1)	{
 				aimGun(enemies.getBearing(target));
-				if(getGunHeat() == 0)	{
-					fire(1);
-				}
 			}
 		}
 	}
 	
 	public void aimGun(double bearing)	{
-		turnGunRight(getHeading() - getGunHeading() + enemies.getBearing(target));
+    // we're guaranteed to always have a target
+
 	}
 
 	@Override
