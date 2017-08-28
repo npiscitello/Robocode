@@ -5,10 +5,15 @@ ECHO					:=	@echo -e
 
 SUPERPACKAGE 	:= 	nbp
 ROBOTNAME 		:= 	BaxterLOL
+ROBOTVER			:=	0.1
+ROBOTDESC			:=	I just wanted an excuse to write code...
+ROBOTAUTH			:=	thatvolvonut
+ROBOTCN				:=	nbp.BaxterLOL
 
 ROBOCODE			:= 	~/windows/robocode
 ROBOTS_DIR   	:= 	$(ROBOCODE)/robots
 ROBOCODEJAR  	:= 	$(ROBOCODE)/libs/robocode.jar
+ROBOCODEVER		:=	1.9.2.6
 
 ROBOTJAR    	:= 	$(SUPERPACKAGE).BaxterLOL.jar 
 OUTDIR 				:= 	out
@@ -22,6 +27,7 @@ SRC 					:= 	BaxterLOL.java	\
 									EnemyBots.java
 
 CLASSES 			:=	$(SRC:%.java=$(OUTDIR)/%.class)
+PROPS					:=	$(ROBOTNAME).properties
 
 .SUFFIXES: .java .class 
 
@@ -29,15 +35,26 @@ all: $(ROBOTS_DIR)/$(ROBOTJAR)
 
 $(ROBOTS_DIR)/$(ROBOTJAR): $(ROBOTJAR)
 	$(ECHO) "\n\x1B[32mCopying $< to $(ROBOTS_DIR)\x1B[0m"
-	cp $(ROBOTJAR) $(ROBOTS_DIR)/$(TESTJAR)
+	mkdir -p $(ROBOTS_DIR)/$(SUPERPACKAGE)
+	cp $(ROBOTJAR) $(ROBOTS_DIR)/$(SUPERPACKAGE)
 
-$(ROBOTJAR): $(CLASSES)
+$(ROBOTJAR): $(CLASSES) $(PROPS)
 	$(ECHO) "\n\x1B[32mPacking $@...\x1B[0m"
 	$(JAR) $@  `find $(OUTDIR)/$(SUPERPACKAGE) -type f`
 
 $(CLASSES): $(SRC)
 	$(ECHO) "\n\x1B[32mCompiling $@...\x1B[0m"
 	$(JAVAC) $(JFLAGS) $^
+
+$(PROPS):
+	$(ECHO) "\n\x1B[32mCreating $@...\x1B[0m"
+	@echo "robot.description=$(ROBOTDESC)"	\
+				"robot.include.source=true"				\
+				"robocode.version=$(ROBOCODEVER)"	\
+				"robot.version=$(ROBOTVER)"				\
+				"robot.author.name=$(ROBOTAUTH)"	\
+				"robot.classname=$(ROBOTCN)"			\
+				> $(OUTDIR)/$(SUPERPACKAGE)/$@
 
 $(SRC): $(OUTDIR)
 
