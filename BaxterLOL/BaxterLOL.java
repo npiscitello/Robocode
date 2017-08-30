@@ -33,14 +33,11 @@ import nbp.EnemyBot;
  * 				- where cst = circle start threshold and mrt = movement resume threshold
  */
 
-public class BaxterLOL extends AdvancedRobot
-{
+public class BaxterLOL extends AdvancedRobot {
 
   Map<String, EnemyBot> enemies = new HashMap<String, EnemyBot>();
-	String target = "";
-	
+	String target = null;
 
-	@Override
 	public void run() {
 
 			// body, gun, radar, bullet, scanarc
@@ -55,44 +52,23 @@ public class BaxterLOL extends AdvancedRobot
 		}
 	}
 
-  @Override
 	public void onScannedRobot(ScannedRobotEvent e) {
-    String enemyname = e.getName();
+    String scanned = e.getName();
     // this instantiates and copies (I think?) an object on each scan; definitely
     // viable for an optimization!
-    enemies.put(enemyname, new EnemyBot(e));
+    enemies.put(scanned, new EnemyBot(e));
+    if( target == null ) {
+      target = scanned;
+    } else {
+      if( enemies.get(target).getDistance() > enemies.get(scanned).getDistance() ) {
+        target = scanned;
+      }
+    }
     System.out.print("Scanned ");
-    System.out.print(enemyname);
+    System.out.print(scanned);
     System.out.print(", distance: ");
-    System.out.println(enemies.get(enemyname).getDistance());
-    /*
-		System.out.print("Registered Enemies: ");
-		System.out.print(enemies.getName());
-		System.out.print("		Updated: ");
-		System.out.println(e.getName());
-		if(target != -1)	{
-			System.out.print("Targeted: ");
-			System.out.println(enemies.getName(target));
-		}
-    */
+    System.out.print(enemies.get(scanned).getDistance());
+    System.out.print(", target: ");
+    System.out.println(target);
 	}
-	
-  /*
-	@Override
-	public void onStatus(StatusEvent e)	{
-			// if Baxter knows about all the robots but hasn't targeted one, target closest robot
-		if(e.getStatus().getOthers() == enemies.getName().size() && target == -1)	{
-			target = enemies.getDistance().indexOf(Collections.min(enemies.getDistance()));
-		}
-	}
-	
-	@Override
-	public void onRobotDeath(RobotDeathEvent e)	{
-			// delete dead robot from database
-		enemies.remove(enemies.getName().indexOf(e.getName()));
-		if(enemies.getName(target).equals(e.getName()))	{
-			target = -1;
-		}
-	}	
-  */
 }
