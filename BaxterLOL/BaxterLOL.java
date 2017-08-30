@@ -1,12 +1,16 @@
 package nbp;
 import java.awt.Color;
 import java.util.Collections;
+import java.util.Map;
+import java.util.HashMap;
 
 import robocode.AdvancedRobot;
 import robocode.RobotDeathEvent;
 import robocode.Rules;
 import robocode.ScannedRobotEvent;
 import robocode.StatusEvent;
+
+import nbp.EnemyBot;
 
 /**
  * BaxterLOL - a robot by Nick P
@@ -32,9 +36,8 @@ import robocode.StatusEvent;
 public class BaxterLOL extends AdvancedRobot
 {
 
-	EnemyBots enemies = new EnemyBots();
-		// contains the index value of the targeted enemy; -1 indicates no target
-	int target = -1;
+  Map<String, EnemyBot> enemies = new HashMap<String, EnemyBot>();
+	String target = "";
 	
 
 	@Override
@@ -49,20 +52,20 @@ public class BaxterLOL extends AdvancedRobot
 
 		while(true) {
 			turnRadarRight(Rules.RADAR_TURN_RATE);
-			if(target != -1)	{
-				aimGun(enemies.getBearing(target));
-			}
 		}
 	}
-	
-	public void aimGun(double bearing)	{
-    // we're guaranteed to always have a target
 
-	}
-
-	@Override
+  @Override
 	public void onScannedRobot(ScannedRobotEvent e) {
-		enemies.update(e);
+    String enemyname = e.getName();
+    // this instantiates and copies (I think?) an object on each scan; definitely
+    // viable for an optimization!
+    enemies.put(enemyname, new EnemyBot(e));
+    System.out.print("Scanned ");
+    System.out.print(enemyname);
+    System.out.print(", distance: ");
+    System.out.println(enemies.get(enemyname).getDistance());
+    /*
 		System.out.print("Registered Enemies: ");
 		System.out.print(enemies.getName());
 		System.out.print("		Updated: ");
@@ -71,9 +74,10 @@ public class BaxterLOL extends AdvancedRobot
 			System.out.print("Targeted: ");
 			System.out.println(enemies.getName(target));
 		}
-
+    */
 	}
 	
+  /*
 	@Override
 	public void onStatus(StatusEvent e)	{
 			// if Baxter knows about all the robots but hasn't targeted one, target closest robot
@@ -90,4 +94,5 @@ public class BaxterLOL extends AdvancedRobot
 			target = -1;
 		}
 	}	
+  */
 }

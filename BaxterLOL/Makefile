@@ -24,7 +24,7 @@ JFLAGS 				:= 	-d $(OUTDIR) -cp $(ROBOCODEJAR)
 JAR						:=	jar cvf
 
 SRC 					:= 	BaxterLOL.java	\
-									EnemyBots.java
+									EnemyBot.java
 
 CLASSES 			:=	$(SRC:%.java=$(OUTDIR)/%.class)
 PROPS					:=	$(ROBOTNAME).properties
