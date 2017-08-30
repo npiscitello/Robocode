@@ -8,7 +8,6 @@ import robocode.AdvancedRobot;
 import robocode.RobotDeathEvent;
 import robocode.Rules;
 import robocode.ScannedRobotEvent;
-import robocode.StatusEvent;
 
 import nbp.EnemyBot;
 
@@ -48,7 +47,22 @@ public class BaxterLOL extends AdvancedRobot {
 		setAdjustGunForRobotTurn(true);
 
 		while(true) {
-			turnRadarRight(Rules.RADAR_TURN_RATE);
+			setTurnRadarRight(Rules.RADAR_TURN_RATE);
+
+      // turn gun to currently targeted enemy, if there is a target
+      if( target != null ) {
+
+        System.out.print("Heading: ");
+        System.out.print(getHeadingRadians());
+        System.out.print(", Gun Heading: ");
+        System.out.print(getGunHeadingRadians());
+        System.out.print(", Bearing: ");
+        System.out.print(enemies.get(target).getBearingRadians());
+        System.out.print(", Target: ");
+        System.out.println(target);
+      }
+
+      execute();
 		}
 	}
 
@@ -64,11 +78,21 @@ public class BaxterLOL extends AdvancedRobot {
         target = scanned;
       }
     }
+    /*
     System.out.print("Scanned ");
     System.out.print(scanned);
     System.out.print(", distance: ");
     System.out.print(enemies.get(scanned).getDistance());
     System.out.print(", target: ");
     System.out.println(target);
+    */
 	}
+
+  // remove all traces of a dead robot
+  public void onRobotDeath(RobotDeathEvent e) {
+    if( e.getName() == target ) {
+      target = null;
+    }
+    enemies.remove(e.getName());
+  }
 }
