@@ -52,14 +52,31 @@ public class BaxterLOL extends AdvancedRobot {
       // turn gun to currently targeted enemy, if there is a target
       if( target != null ) {
 
-        System.out.print("Heading: ");
-        System.out.print(getHeadingRadians());
-        System.out.print(", Gun Heading: ");
-        System.out.print(getGunHeadingRadians());
-        System.out.print(", Bearing: ");
-        System.out.print(enemies.get(target).getBearingRadians());
-        System.out.print(", Target: ");
-        System.out.println(target);
+        double robot_heading = getHeadingRadians();
+        double gun_heading = getGunHeadingRadians();
+        double enemy_bearing = enemies.get(target).getBearingRadians();
+        double turn_right = 0;
+
+        // robot_heading + enemy_bearing = gun_heading
+        turn_right = (robot_heading + enemy_bearing) - gun_heading;
+        if( turn_right > Rules.GUN_TURN_RATE_RADIANS ) {
+          turn_right = Rules.GUN_TURN_RATE_RADIANS;
+        }
+
+        setTurnGunRightRadians(turn_right);
+
+        System.out.print("T: ");
+        System.out.print(target);
+        System.out.print(", H: ");
+        System.out.print(robot_heading);
+        System.out.print(", B: ");
+        System.out.print(enemy_bearing);
+        System.out.print(", H+B: ");
+        System.out.print(robot_heading + enemy_bearing);
+        System.out.print(", G: ");
+        System.out.print(gun_heading);
+        System.out.print(", R: ");
+        System.out.println(turn_right);
       }
 
       execute();
@@ -78,14 +95,6 @@ public class BaxterLOL extends AdvancedRobot {
         target = scanned;
       }
     }
-    /*
-    System.out.print("Scanned ");
-    System.out.print(scanned);
-    System.out.print(", distance: ");
-    System.out.print(enemies.get(scanned).getDistance());
-    System.out.print(", target: ");
-    System.out.println(target);
-    */
 	}
 
   // remove all traces of a dead robot
